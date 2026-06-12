@@ -55,7 +55,7 @@ namespace DataAccessLayer.Database
 			try
 			{
 				var entities = FindAll();
-				return entities.Where(expression.Compile());
+				return entities.Where(expression.Compile()).ToList();
 			}
 			catch
 			{
@@ -80,12 +80,12 @@ namespace DataAccessLayer.Database
 			try
 			{
 				var entities = FindAll();
-				var entity = entities.Where(expression.Compile());
+				var entity = entities.Where(expression.Compile()).ToList();
 				foreach (var dataEntity in entity)
 				{
 					DatabaseInstance.Remove(Tuple.Create(dataEntity.SiteId, dataEntity.CompanyCode));
 				}
-				
+
 				return true;
 			}
 			catch

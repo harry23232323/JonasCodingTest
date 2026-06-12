@@ -56,7 +56,7 @@ namespace DataAccessLayer.Database
         {
             try
             {
-                return _database.Values.Where(expression.Compile());
+                return _database.Values.Where(expression.Compile()).ToList();
             }
             catch
             {
