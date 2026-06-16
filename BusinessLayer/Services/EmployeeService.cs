@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -43,10 +44,10 @@ namespace BusinessLayer.Services
             });
         }
 
-        public async Task<EmployeeInfo> GetEmployeeByCodeAsync(string employeeCode)
+        public async Task<EmployeeInfo> GetEmployeeByCodeAsync(string siteId, string employeeCode)
         {
-            _logger.LogInfo($"Retrieving employee with code: {employeeCode}");
-            var employee = await _employeeRepository.GetByCodeAsync(employeeCode);
+            _logger.LogInfo($"Retrieving employee with siteId: {siteId}, code: {employeeCode}");
+            var employee = await _employeeRepository.GetByCodeAsync(siteId, employeeCode);
             if (employee == null) return null;
 
             var info = _mapper.Map<EmployeeInfo>(employee);
@@ -59,6 +60,7 @@ namespace BusinessLayer.Services
         {
             _logger.LogInfo($"Saving employee with code: {employeeInfo?.EmployeeCode}");
             var entity = _mapper.Map<Employee>(employeeInfo);
+            entity.LastModified = DateTime.UtcNow;
             return await _employeeRepository.SaveAsync(entity);
         }
 

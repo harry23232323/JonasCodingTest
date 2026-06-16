@@ -20,9 +20,10 @@ namespace DataAccessLayer.Repositories
             return await _employeeDbWrapper.FindAllAsync();
         }
 
-        public async Task<Employee> GetByCodeAsync(string employeeCode)
+        public async Task<Employee> GetByCodeAsync(string siteId, string employeeCode)
         {
-            var results = await _employeeDbWrapper.FindAsync(e => e.EmployeeCode.Equals(employeeCode));
+            var results = await _employeeDbWrapper.FindAsync(e =>
+                e.SiteId.Equals(siteId) && e.EmployeeCode.Equals(employeeCode));
             return results?.FirstOrDefault();
         }
 

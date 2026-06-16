@@ -81,6 +81,9 @@ namespace DataAccessLayer.Database
             try
             {
                 var toDelete = _database.Values.Where(expression.Compile()).ToList();
+                if (!toDelete.Any())
+                    return false;
+
                 foreach (var employee in toDelete)
                     _database.Remove(GetKey(employee));
 

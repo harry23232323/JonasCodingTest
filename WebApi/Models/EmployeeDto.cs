@@ -1,9 +1,7 @@
 namespace WebApi.Models
 {
-    public class EmployeeDto
+    public class EmployeeDto : BaseDto
     {
-        public string SiteId { get; set; }
-        public string CompanyCode { get; set; }
         public string EmployeeCode { get; set; }
         public string EmployeeName { get; set; }
         public string CompanyName { get; set; }

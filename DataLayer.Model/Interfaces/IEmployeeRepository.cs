@@ -7,7 +7,7 @@ namespace DataAccessLayer.Model.Interfaces
     public interface IEmployeeRepository
     {
         Task<IEnumerable<Employee>> GetAllAsync();
-        Task<Employee> GetByCodeAsync(string employeeCode);
+        Task<Employee> GetByCodeAsync(string siteId, string employeeCode);
         Task<bool> SaveAsync(Employee employee);
         Task<bool> DeleteAsync(string siteId, string employeeCode);
     }

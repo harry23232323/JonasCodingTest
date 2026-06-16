@@ -40,12 +40,12 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        [Route("{employeeCode}")]
-        public async Task<IHttpActionResult> GetAsync(string employeeCode)
+        [Route("{siteId}/{employeeCode}")]
+        public async Task<IHttpActionResult> GetAsync(string siteId, string employeeCode)
         {
             try
             {
-                var item = await _employeeService.GetEmployeeByCodeAsync(employeeCode);
+                var item = await _employeeService.GetEmployeeByCodeAsync(siteId, employeeCode);
                 if (item == null)
                     return NotFound();
 
@@ -53,7 +53,7 @@ namespace WebApi.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error retrieving employee with code: {employeeCode}", ex);
+                _logger.LogError($"Error retrieving employee with siteId: {siteId}, code: {employeeCode}", ex);
                 return InternalServerError(ex);
             }
         }
@@ -77,6 +77,31 @@ namespace WebApi.Controllers
             catch (Exception ex)
             {
                 _logger.LogError("Error saving employee", ex);
+                return InternalServerError(ex);
+            }
+        }
+
+        [HttpPut]
+        [Route("{siteId}/{employeeCode}")]
+        public async Task<IHttpActionResult> PutAsync(string siteId, string employeeCode, [FromBody] EmployeeDto employeeDto)
+        {
+            try
+            {
+                if (employeeDto == null)
+                    return BadRequest("Employee data is required.");
+
+                employeeDto.SiteId = siteId;
+                employeeDto.EmployeeCode = employeeCode;
+                var employeeInfo = _mapper.Map<EmployeeInfo>(employeeDto);
+                var success = await _employeeService.SaveEmployeeAsync(employeeInfo);
+                if (!success)
+                    return BadRequest("Failed to update employee.");
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error updating employee with siteId: {siteId}, code: {employeeCode}", ex);
                 return InternalServerError(ex);
             }
         }

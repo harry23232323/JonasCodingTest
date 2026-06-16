@@ -11,11 +11,11 @@ namespace DataAccessLayer.Database
 {
 	public class InMemoryDatabase<T> : IDbWrapper<T> where T : DataEntity
 	{
-		private Dictionary<Tuple<string, string>, DataEntity> DatabaseInstance;
+		private Dictionary<Tuple<string, string>, T> DatabaseInstance;
 
 		public InMemoryDatabase()
 		{
-			DatabaseInstance = new Dictionary<Tuple<string, string>, DataEntity>();
+			DatabaseInstance = new Dictionary<Tuple<string, string>, T>();
 		}
 
 		public bool Insert(T data)
@@ -67,7 +67,7 @@ namespace DataAccessLayer.Database
 		{
 			try
 			{
-				return DatabaseInstance.Values.OfType<T>();
+				return DatabaseInstance.Values.ToList();
 			}
 			catch
 			{
@@ -80,11 +80,12 @@ namespace DataAccessLayer.Database
 			try
 			{
 				var entities = FindAll();
-				var entity = entities.Where(expression.Compile()).ToList();
-				foreach (var dataEntity in entity)
-				{
+				var toDelete = entities.Where(expression.Compile()).ToList();
+				if (!toDelete.Any())
+					return false;
+
+				foreach (var dataEntity in toDelete)
 					DatabaseInstance.Remove(Tuple.Create(dataEntity.SiteId, dataEntity.CompanyCode));
-				}
 
 				return true;
 			}

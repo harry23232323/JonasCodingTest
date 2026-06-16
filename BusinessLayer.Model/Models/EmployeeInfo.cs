@@ -1,9 +1,7 @@
 namespace BusinessLayer.Model.Models
 {
-    public class EmployeeInfo
+    public class EmployeeInfo : BaseInfo
     {
-        public string SiteId { get; set; }
-        public string CompanyCode { get; set; }
         public string EmployeeCode { get; set; }
         public string EmployeeName { get; set; }
         public string CompanyName { get; set; }
